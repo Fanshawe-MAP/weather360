@@ -46,24 +46,7 @@ extension CitiesViewController: UITableViewDataSource{
 //           content.image = UIImage(systemName: "sunny") // Replace "sfIcon" with the name of your SF symbol
            
       
-        
-        let (sfSymbolName, primaryColor, secondaryColor) = WeatherHelper.getWeatherSFIconData(for: city.conditionCode, isDay: city.isDay)
-        cell.backgroundColor = city.isDay == 1 ? UIColor.white : UIColor.black
-
-        // Check if the SF Symbol name is available
-        if let sfSymbolName = sfSymbolName {
-            // Create the SF Symbol image with two colors
-            let symbol = UIImage(systemName: sfSymbolName)?
-                .withTintColor(primaryColor)
-                .withTintColor(secondaryColor, renderingMode: .alwaysOriginal)
-            
-                content.image = symbol
-            
-        } else {
-            // Handle the case where the SF Symbol name is not found (nil).
-            // For example, you can display a placeholder image or show an error message.
-        }
-        cell.contentConfiguration = content
+            cell.contentConfiguration = content
            
            return cell
        }

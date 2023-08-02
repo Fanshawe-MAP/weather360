@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4A6C9BD02A79F2C100F60925 /* CitiesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A6C9BCF2A79F2C100F60925 /* CitiesViewController.swift */; };
+		FD1279FE2A7B1EE600DF94A3 /* CitiesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1279FD2A7B1EE600DF94A3 /* CitiesViewController.swift */; };
 		FD7FF2252A7890FF00535B67 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD7FF2242A7890FF00535B67 /* AppDelegate.swift */; };
 		FD7FF2272A7890FF00535B67 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD7FF2262A7890FF00535B67 /* SceneDelegate.swift */; };
 		FD7FF2292A7890FF00535B67 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD7FF2282A7890FF00535B67 /* ViewController.swift */; };
@@ -17,7 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		4A6C9BCF2A79F2C100F60925 /* CitiesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CitiesViewController.swift; path = ../../../../Downloads/Weather360/CitiesViewController.swift; sourceTree = "<group>"; };
+		FD1279FD2A7B1EE600DF94A3 /* CitiesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitiesViewController.swift; sourceTree = "<group>"; };
 		FD7FF2212A7890FF00535B67 /* Weather360.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Weather360.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD7FF2242A7890FF00535B67 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FD7FF2262A7890FF00535B67 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -42,7 +42,7 @@
 		FD7FF2182A7890FF00535B67 = {
 			isa = PBXGroup;
 			children = (
-				4A6C9BCF2A79F2C100F60925 /* CitiesViewController.swift */,
+				FD1279FD2A7B1EE600DF94A3 /* CitiesViewController.swift */,
 				FD7FF2232A7890FF00535B67 /* Weather360 */,
 				FD7FF2222A7890FF00535B67 /* Products */,
 			);
@@ -142,7 +142,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FD7FF2292A7890FF00535B67 /* ViewController.swift in Sources */,
-				4A6C9BD02A79F2C100F60925 /* CitiesViewController.swift in Sources */,
+				FD1279FE2A7B1EE600DF94A3 /* CitiesViewController.swift in Sources */,
 				FD7FF2252A7890FF00535B67 /* AppDelegate.swift in Sources */,
 				FD7FF2272A7890FF00535B67 /* SceneDelegate.swift in Sources */,
 			);
