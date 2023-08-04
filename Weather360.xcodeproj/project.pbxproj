@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		DD4350922A7DC45D002DBCF1 /* WeatherHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4350912A7DC45D002DBCF1 /* WeatherHelper.swift */; };
+		DD4350942A7DC6CE002DBCF1 /* WeatherHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4350932A7DC6CE002DBCF1 /* WeatherHelper.swift */; };
 		FD1279FE2A7B1EE600DF94A3 /* CitiesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD1279FD2A7B1EE600DF94A3 /* CitiesViewController.swift */; };
 		FD7FF2252A7890FF00535B67 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD7FF2242A7890FF00535B67 /* AppDelegate.swift */; };
 		FD7FF2272A7890FF00535B67 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD7FF2262A7890FF00535B67 /* SceneDelegate.swift */; };
@@ -18,7 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		DD4350912A7DC45D002DBCF1 /* WeatherHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WeatherHelper.swift; path = ../../../../../Downloads/WeatherHelper.swift; sourceTree = "<group>"; };
+		DD4350932A7DC6CE002DBCF1 /* WeatherHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = WeatherHelper.swift; path = ../WeatherHelper.swift; sourceTree = "<group>"; };
 		FD1279FD2A7B1EE600DF94A3 /* CitiesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CitiesViewController.swift; sourceTree = "<group>"; };
 		FD7FF2212A7890FF00535B67 /* Weather360.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Weather360.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD7FF2242A7890FF00535B67 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -62,7 +62,7 @@
 			isa = PBXGroup;
 			children = (
 				FD7FF2242A7890FF00535B67 /* AppDelegate.swift */,
-				DD4350912A7DC45D002DBCF1 /* WeatherHelper.swift */,
+				DD4350932A7DC6CE002DBCF1 /* WeatherHelper.swift */,
 				FD7FF2262A7890FF00535B67 /* SceneDelegate.swift */,
 				FD7FF2282A7890FF00535B67 /* ViewController.swift */,
 				FD7FF22A2A7890FF00535B67 /* Main.storyboard */,
@@ -145,7 +145,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FD7FF2292A7890FF00535B67 /* ViewController.swift in Sources */,
-				DD4350922A7DC45D002DBCF1 /* WeatherHelper.swift in Sources */,
+				DD4350942A7DC6CE002DBCF1 /* WeatherHelper.swift in Sources */,
 				FD1279FE2A7B1EE600DF94A3 /* CitiesViewController.swift in Sources */,
 				FD7FF2252A7890FF00535B67 /* AppDelegate.swift in Sources */,
 				FD7FF2272A7890FF00535B67 /* SceneDelegate.swift in Sources */,
