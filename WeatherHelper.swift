@@ -17,7 +17,7 @@ struct WeatherHelper {
             primaryColor = .gray
             secondaryColor = .white
         } else {
-            primaryColor = .red
+            primaryColor = UIColor(red: 32.0, green: 33.0, blue: 36.0, alpha: 0.9)
             secondaryColor = .orange
         }
         
@@ -27,7 +27,7 @@ struct WeatherHelper {
         case 1000:
             return (isDay == 1 ? "sun.max.fill" : "moon.fill", primaryColor, secondaryColor)
         case 1003:
-            return ("cloud.sun.fill", primaryColor, secondaryColor)
+            return (isDay == 1 ? "cloud.sun.fill" : "cloud.moon.fill", primaryColor, secondaryColor)
         case 1006:
             return ("cloud.fill", primaryColor, secondaryColor)
         case 1009:
