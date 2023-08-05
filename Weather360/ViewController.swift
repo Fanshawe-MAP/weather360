@@ -25,6 +25,7 @@ class ViewController: UIViewController,UITextFieldDelegate,CLLocationManagerDele
     
     var isCelciusSelected : Bool = true
     var locationManager: CLLocationManager?
+    var searchHistory = SearchHistory(history: [])
     
     struct CurrentLocationWrapper: Decodable {
         let location:locationData
@@ -62,17 +63,18 @@ class ViewController: UIViewController,UITextFieldDelegate,CLLocationManagerDele
         var history:[WeatherData]
     }
     
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         SearchTxt.delegate = self
-        
-     
         makeHidden(true)
         
        
     }
     
+    // to hide the lable and image on inital load
     func makeHidden(_ isTrue: Bool){
         weatherImage.isHidden = isTrue
         weatherCondition.isHidden = isTrue
@@ -84,7 +86,7 @@ class ViewController: UIViewController,UITextFieldDelegate,CLLocationManagerDele
     }
     
     
-//    current location
+//  to get current location
     func setupLocationManager() {
          locationManager = CLLocationManager()
          locationManager?.delegate = self
@@ -93,13 +95,10 @@ class ViewController: UIViewController,UITextFieldDelegate,CLLocationManagerDele
      }
     
     
-    
     @IBAction func onCurrentLocationPress(_ sender: UIButton) {
         if locationManager == nil {
-            // Location manager is not set up, set it up first
             setupLocationManager()
         }
-        // Start updating location (whether the location manager is newly set up or already set up)
         locationManager?.startUpdatingLocation()
     }
     
@@ -120,115 +119,29 @@ class ViewController: UIViewController,UITextFieldDelegate,CLLocationManagerDele
             print("Location update error: \(error.localizedDescription)")
         }
     
-    var searchHistory = SearchHistory(history: [])
+
     
     
-    
-    func parseWeather(data: Data) -> CurrentLocationWrapper? {
-        let decoder = JSONDecoder()
-        var wrapper: CurrentLocationWrapper?
-        
-        do{
-            wrapper = try decoder.decode(CurrentLocationWrapper.self, from: data)
-        }
-        catch{
-            print (error)
-        }
-        return wrapper
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        // Dismiss the keyboard when "Return" key is pressed
+        textField.resignFirstResponder()
+
+        // Perform your search operation or any other action here
+        // For example, you can call your 'searchWeather' function
+        searchWeather(SearchTxt.text ?? "")
+
+        // Return 'true' to indicate that the 'Return' key press has been handled
+        return true
     }
     
-    func getWeatherData(data:Data?,response:URLResponse?,error:Error?){
+    @IBAction func onSearchBtnPress(_ sender: UIButton) {
+        searchWeather(SearchTxt.text ?? "")
         
-        
-        guard error == nil else{
-            print("there is a error")
-            return
-        }
-        
-        guard let data = data else{
-            print("No data received")
-            return
-        }
-        
-        
-        
-        // Check the status code in the URLResponse
-        if let httpResponse = response as? HTTPURLResponse {
-            let statusCode = httpResponse.statusCode
-            if statusCode == 400 {
-                print("Bad Request - The server could not understand the request.")
-                               DispatchQueue.main.async {
-                                   self.locationInvalidLabel.isHidden = false
-                                   self.locationInvalidLabel.text = "Location with '\(String(describing: self.SearchTxt.text!))' not found!"
-                                   self.makeHidden(true)
-                               }
-                           
-                return
-            }
-        }
-        
-        
-        if let locationWrapper = parseWeather(data: data){
-//            print(locationWrapper.location.name)
-
-            let weatherData = WeatherData(
-                 locationName: locationWrapper.location.name,
-                 tempCelsius: locationWrapper.current.temp_c,
-                 tempFahrenheit: locationWrapper.current.temp_f,
-                 conditionText: locationWrapper.current.condition.text,
-                 conditionCode: locationWrapper.current.condition.code,
-                 isDay: locationWrapper.current.is_day
-             )
-
-
-            searchHistory.history.append(weatherData)
-            changeWeatherColor(locationWrapper.current.condition.code,locationWrapper.current.is_day)
-
-
-            DispatchQueue.main.async {
-                self.locationInvalidLabel.isHidden = true
-                      self.weatherLabel.text = String(weatherData.tempCelsius)
-                      self.weatherCondition.text = weatherData.conditionText
-                      self.cityName.text = weatherData.locationName
-                self.backgroundImage.image = UIImage(named: locationWrapper.current.is_day == 0 ? "night_background": "light_background")
-                self.makeHidden(false)
-                self.changeLabelColorWithDay(locationWrapper.current.is_day)
-
-                  }
-
-        }
     }
     
-    func changeWeatherColor(_ weatherCode: Int, _ isDay: Int) {
-        let (sfSymbolName, primaryColor, secondaryColor) = WeatherHelper.getWeatherSFIconData(for: weatherCode, isDay: isDay)
-
-        // Check if the SF Symbol name is available
-        if let sfSymbolName = sfSymbolName {
-            
-            let config = UIImage.SymbolConfiguration(paletteColors: [primaryColor,secondaryColor])
-          
-
-            DispatchQueue.main.async { // Switch to the main thread
-//                self.weatherImage.image = symbol
-                self.weatherImage.preferredSymbolConfiguration = config
-                self.weatherImage.image = UIImage(systemName: sfSymbolName)
-            }
-        } else {
-            // Handle the case where the SF Symbol name is not found (nil).
-            // For example, you can display a placeholder image or show an error message.
-        }
-    }
     
-    func changeLabelColorWithDay(_ isDay: Int){
-        let isDayTime: Bool = isDay == 1
-        weatherCondition.textColor = isDayTime ? UIColor.systemBlue : UIColor.white
-        cityName.textColor = UIColor.white
-        
-    }
-
     
     func getUrl(_ location:String)->URL{
-        
         let baseUrl="https://api.weatherapi.com/v1/current.json"
         let key="77e5f75f374648998f2225455232707"
         let locationParam = location.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
@@ -238,55 +151,7 @@ class ViewController: UIViewController,UITextFieldDelegate,CLLocationManagerDele
     }
     
     
-    @IBAction func onTemperatureInfoChange(_ sender: UISegmentedControl) {
-        // Ensure there is at least one weather data in the search history
-        guard let weatherData = searchHistory.history.last else {
-            // If the search history is empty, return
-            return
-        }
-
-        switch sender.selectedSegmentIndex {
-        case 0:
-            // Celsius is selected, update the temperature label with tempCelsius
-            weatherLabel.text = String(weatherData.tempCelsius)
-        case 1:
-            // Fahrenheit is selected, update the temperature label with tempFahrenheit
-            weatherLabel.text = String(weatherData.tempFahrenheit)
-        default:
-            break
-        }
-    }
-
-    
-    @IBAction func onCelciusBtnTap(_ sender: Any) {
-        guard let weatherData = searchHistory.history.last else {
-            // If the search history is empty, return
-            return
-        }
-        weatherLabel.text = String(weatherData.tempCelsius)
-        celBtnLabel.isSelected = true
-        fahBtnLabel.isSelected = false
-      isCelciusSelected = true
-    }
-    
-    @IBAction func onFehBtnTap(_ sender: Any) {
-        guard let weatherData = searchHistory.history.last else {
-            // If the search history is empty, return
-            return
-        }
-     
-        weatherLabel.text = String(weatherData.tempFahrenheit)
-        celBtnLabel.isSelected = false
-        fahBtnLabel.isSelected = true
-        
-        isCelciusSelected = false
-        
-        
-    }
-    
-    
     func searchWeather(_ searchText: String){
-        
         
         guard searchText != "" else {
             self.locationInvalidLabel.isHidden = false
@@ -312,32 +177,148 @@ class ViewController: UIViewController,UITextFieldDelegate,CLLocationManagerDele
     }
 
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        // Dismiss the keyboard when "Return" key is pressed
-        textField.resignFirstResponder()
+//    data from api
+    func getWeatherData(data:Data?,response:URLResponse?,error:Error?){
+        guard error == nil else{
+            print("there is a error")
+            return
+        }
+        
+        guard let data = data else{
+            print("No data received")
+            return
+        }
+        
+        // Check the status code in the URLResponse
+        if let httpResponse = response as? HTTPURLResponse {
+            let statusCode = httpResponse.statusCode
+            if statusCode == 400 {
+                print("Bad Request - The server could not understand the request.")
+                               DispatchQueue.main.async {
+                                   self.locationInvalidLabel.isHidden = false
+                                   self.locationInvalidLabel.text = "Location with '\(String(describing: self.SearchTxt.text!))' not found!"
+                                   self.makeHidden(true)
+                               }
+                return
+            }
+        }
+        
+        
+        if let locationWrapper = parseWeather(data: data){
+            let weatherData = WeatherData(
+                 locationName: locationWrapper.location.name,
+                 tempCelsius: locationWrapper.current.temp_c,
+                 tempFahrenheit: locationWrapper.current.temp_f,
+                 conditionText: locationWrapper.current.condition.text,
+                 conditionCode: locationWrapper.current.condition.code,
+                 isDay: locationWrapper.current.is_day
+             )
 
-        // Perform your search operation or any other action here
-        // For example, you can call your 'searchWeather' function
-        searchWeather(SearchTxt.text ?? "")
+            // push the data to searchHistory
+            searchHistory.history.append(weatherData)
+            changeWeatherColor(locationWrapper.current.condition.code,locationWrapper.current.is_day)
 
-        // Return 'true' to indicate that the 'Return' key press has been handled
-        return true
+            //return to main thread
+            DispatchQueue.main.async {
+                self.locationInvalidLabel.isHidden = true
+                      self.weatherLabel.text = String(weatherData.tempCelsius)
+                      self.weatherCondition.text = weatherData.conditionText
+                      self.cityName.text = weatherData.locationName
+                self.backgroundImage.image = UIImage(named: locationWrapper.current.is_day == 0 ? "night_background": "light_background")
+                self.makeHidden(false)
+                self.changeLabelColorWithDay(locationWrapper.current.is_day)
+
+                  }
+
+        }
     }
     
-    @IBAction func onSearchBtnPress(_ sender: UIButton) {
-        searchWeather(SearchTxt.text ?? "")
+//    to decode the JSON data
+    func parseWeather(data: Data) -> CurrentLocationWrapper? {
+        let decoder = JSONDecoder()
+        var wrapper: CurrentLocationWrapper?
+        
+        do{
+            wrapper = try decoder.decode(CurrentLocationWrapper.self, from: data)
+        }
+        catch{
+            print (error)
+        }
+        return wrapper
+    }
+
+    
+//    change weather condition icon
+    func changeWeatherColor(_ weatherCode: Int, _ isDay: Int) {
+        let (sfSymbolName, primaryColor, secondaryColor) = WeatherHelper.getWeatherSFIconData(for: weatherCode, isDay: isDay)
+
+        // Check if the SF Symbol name is available
+        if let sfSymbolName = sfSymbolName {
+            
+            let config = UIImage.SymbolConfiguration(paletteColors: [primaryColor,secondaryColor])
+          
+            // Switch to the main thread
+            DispatchQueue.main.async {
+                self.weatherImage.preferredSymbolConfiguration = config
+                self.weatherImage.image = UIImage(systemName: sfSymbolName)
+            }
+        } else {
+            print("there is an error in sfSymbol icon.")
+        }
+    }
+    
+//    change the label color as for day or nighr
+    func changeLabelColorWithDay(_ isDay: Int){
+        let isDayTime: Bool = isDay == 1
+        weatherCondition.textColor = isDayTime ? UIColor.systemBlue : UIColor.white
+        cityName.textColor = UIColor.white
         
     }
-      
+    
+    
+
+    //     on temperature button toggle to celcius
+    @IBAction func onCelciusBtnTap(_ sender: Any) {
+        guard let weatherData = searchHistory.history.last else {
+            // If the search history is empty, return
+            return
+        }
+        weatherLabel.text = String(weatherData.tempCelsius)
+        celBtnLabel.isSelected = true
+        fahBtnLabel.isSelected = false
+      isCelciusSelected = true
+    }
+    
+//     on temperature button toggle to ferenheit
+    @IBAction func onFehBtnTap(_ sender: Any) {
+        guard let weatherData = searchHistory.history.last else {
+            // If the search history is empty, return
+            return
+        }
+     
+        weatherLabel.text = String(weatherData.tempFahrenheit)
+        celBtnLabel.isSelected = false
+        fahBtnLabel.isSelected = true
+        
+        isCelciusSelected = false
+        
+        
+    }
+    
+    
+
+// on cities button pressed
     @IBAction func onCitiesPress(_ sender: UIButton) {
         performSegue(withIdentifier: "goToCitiesScreen", sender: nil)
     }
     
+    
+//    pass data with segue
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "goToCitiesScreen" {
             if let citiesViewController = segue.destination as? CitiesViewController {
-                citiesViewController.citiesArray = searchHistory.history // Pass the history array
-//                citiesViewController.isCelciusSelected = isCelciusSelected
+                citiesViewController.citiesArray = searchHistory.history
+                citiesViewController.isCelciusSelected = isCelciusSelected
             }
         }
     }

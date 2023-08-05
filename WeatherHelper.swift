@@ -17,7 +17,7 @@ struct WeatherHelper {
             primaryColor = .gray
             secondaryColor = .white
         } else {
-            primaryColor = UIColor(red: 32.0, green: 33.0, blue: 36.0, alpha: 0.9)
+            primaryColor =  .white
             secondaryColor = .orange
         }
         

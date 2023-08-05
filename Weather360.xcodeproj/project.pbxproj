@@ -44,7 +44,6 @@
 		FD7FF2182A7890FF00535B67 = {
 			isa = PBXGroup;
 			children = (
-				FD1279FD2A7B1EE600DF94A3 /* CitiesViewController.swift */,
 				FD7FF2232A7890FF00535B67 /* Weather360 */,
 				FD7FF2222A7890FF00535B67 /* Products */,
 			);
@@ -63,6 +62,7 @@
 			children = (
 				FD7FF2242A7890FF00535B67 /* AppDelegate.swift */,
 				DD4350932A7DC6CE002DBCF1 /* WeatherHelper.swift */,
+				FD1279FD2A7B1EE600DF94A3 /* CitiesViewController.swift */,
 				FD7FF2262A7890FF00535B67 /* SceneDelegate.swift */,
 				FD7FF2282A7890FF00535B67 /* ViewController.swift */,
 				FD7FF22A2A7890FF00535B67 /* Main.storyboard */,
