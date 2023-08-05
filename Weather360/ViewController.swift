@@ -221,7 +221,7 @@ class ViewController: UIViewController,UITextFieldDelegate,CLLocationManagerDele
             //return to main thread
             DispatchQueue.main.async {
                 self.locationInvalidLabel.isHidden = true
-                      self.weatherLabel.text = String(weatherData.tempCelsius)
+                self.weatherLabel.text = String( self.celBtnLabel.isSelected ? weatherData.tempCelsius : weatherData.tempFahrenheit)
                       self.weatherCondition.text = weatherData.conditionText
                       self.cityName.text = weatherData.locationName
                 self.backgroundImage.image = UIImage(named: locationWrapper.current.is_day == 0 ? "night_background": "light_background")
